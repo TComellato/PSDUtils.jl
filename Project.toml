@@ -1,0 +1,10 @@
+name = "SigGenUtils"
+uuid = "a7be6868-2c72-48cc-bcd2-d941549cce75"
+authors = ["Paul Nemec <paul.nemec@tum.de>"]
+version = "0.0.1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
