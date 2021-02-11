@@ -1,7 +1,14 @@
-name = "SigGenUtils"
+name = "PSDUtils"
 uuid = "a7be6868-2c72-48cc-bcd2-d941549cce75"
 authors = ["Paul Nemec <paul.nemec@tum.de>"]
 version = "0.0.1"
+
+[deps]
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+MJDSigGen = "d3f1610b-2cc8-4877-9c4b-1cc92a82e4fd"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+RootHitFiles = "9afafbe4-eab7-4cdf-a919-34f998382b54"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
