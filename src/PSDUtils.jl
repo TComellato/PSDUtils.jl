@@ -3,10 +3,11 @@ module PSDUtils
 import MJDSigGen: get_signal!
 
 using MJDSigGen: SigGenSetup, outside_detector
-using RootHitFiles: EventTuple
+using LegendTextIO: DarioHitsEventTuple
 using DSP: gaussian, conv
 using Random: AbstractRNG, default_rng
 using Distributions: Normal
+using StaticArrays
 
 export todetcoords, todetcoords!, charge_cloud_size, getA, get_rise_time,
 	apply_coll_effects, moving_average!, moving_average, get_noisy_energy, addnoise!
@@ -18,8 +19,10 @@ function todetcoords(x::Real, y::Real, z::Real, zlen::Real)
 end
 
 todetcoords((x, y, z)::NTuple{3, Real}, zlen::Real) = todetcoords(x, y, z, zlen)
+todetcoords(v::SVector{3, T}, zlen::Real) where {T<:Real} =
+    SVector{3, T}(todetcoords(v[1], v[2], v[3], zlen))
 
-function todetcoords!(event::EventTuple, zlen::Real)
+function todetcoords!(event::DarioHitsEventTuple, zlen::Real)
 	event.pos .= todetcoords.(event.pos, zlen)
 	return event
 end
@@ -34,9 +37,10 @@ function get_signal!(
 	length(pos) == length(E) || throw(ArgumentError(
 		"number of pos ($(length(pos)) != number of E ($(length(E))))"))
 
-	for i in 1:length(pos)
-        if !outside_detector(setup, Tuple(pos[i]))
-            get_signal!(working_pulse, setup, Tuple(pos[i]))
+    for i in 1:length(pos)
+        pos_prime = todetcoords(Tuple(pos[i]), setup.xtal_length)
+        if !outside_detector(setup, pos_prime)
+            get_signal!(working_pulse, setup, pos_prime)
             final_pulse .+= E[i] .* working_pulse
         end
 	end
@@ -52,7 +56,7 @@ function get_signal!(setup::SigGenSetup, pos, E)
     )
 end
 
-get_signal!(setup::SigGenSetup, event::EventTuple) = get_signal!(setup, event.pos, event.E)
+get_signal!(setup::SigGenSetup, event::DarioHitsEventTuple) = get_signal!(setup, event.pos, event.E)
 
 """
 	charge_cloud_size(energy)

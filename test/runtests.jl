@@ -1,4 +1,4 @@
-using Test, PSDUtils, RootHitFiles, MJDSigGen, DSP, Distributions
+using Test, PSDUtils, LegendTextIO, MJDSigGen, DSP, Distributions
 using Random: seed!, MersenneTwister
 
 @testset "PSDUtils.jl" begin
@@ -12,7 +12,7 @@ using Random: seed!, MersenneTwister
 		
 		@test todetcoords(0, 5, -200, 100) == (0, 0, 0)
 
-		event = read(RootHitFile("test.root.hits"))
+		event = read(DarioHitsFile("test.root.hits"))
 		xtal_length = SigGenSetup("GWD6022_01ns.config").xtal_length
 
 		pos = todetcoords.(event.pos, xtal_length)
@@ -23,7 +23,7 @@ using Random: seed!, MersenneTwister
 
 	@testset "get_signal!" begin
 		setup = SigGenSetup("GWD6022_01ns.config")
-		event = rand(todetcoords!.(RootHitFile("test.root.hits"), setup.xtal_length))
+		event = rand(collect(DarioHitsFile("test.root.hits")))
 
 		signal = get_signal!(setup, event.pos, event.E)
 		signal2 = get_signal!(setup, event)
