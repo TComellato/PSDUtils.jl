@@ -8,7 +8,7 @@ DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 LegendDataTypes = "99e09c13-5545-5ee2-bfa2-77f358fb75d8"
 LegendTextIO = "c397c909-374d-579b-8af3-fa3aa4f02e89"
-MJDSigGen = "d3f1610b-2cc8-4877-9c4b-1cc92a82e4fd"
+MJDSigGen = "0b925020-e659-485c-98dd-189633cb4be4"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
