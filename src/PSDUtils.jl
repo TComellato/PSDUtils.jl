@@ -75,20 +75,36 @@ getA(signal) = maximum(diff(signal))
 function get_rise_time(signal, lowthr, highthr, tstep=1)
 	highthr >= lowthr || throw(ArgumentError(
 		"highthr ($highthr) must be >= lowthr ($lowthr)"))
-
-	idx1 = findfirst(signal) do y
-		y >= lowthr
+	
+	minindex = nothing;
+	maxindex = nothing;
+	
+	for k=1:length(signal)
+		if signal[k]>=highthr
+			maxindex = k;
+			break;
+		end
+	end
+	
+	if maxindex===nothing
+		return -1
+	end
+	
+	for k=maxindex:-1:1
+		if signal[k]<=lowthr
+			minindex = k+1;
+			break;
+		end
+	end
+	
+	
+	if(maxindex==nothing || minindex==nothing)
+		risetime = 0; 
+	else 
+		risetime = (maxindex-minindex) * tstep;
 	end
 
-	idx1 === nothing && throw(ArgumentError("lowthr greater than all signal"))
-
-	idx2 = findfirst(view(signal, idx1:lastindex(signal))) do y
-		y >= highthr
-	end
-
-	idx2 === nothing ? (idx2 = lastindex(signal) + 1) : (idx2 += idx1 - 1)
-
-	return tstep * (idx2 - idx1)
+	return risetime
 end
 
 function gausswindow(σ::Real, nσ::Real, tstep::Real)
